@@ -1,0 +1,57 @@
+[Unit]
+Description=Web Kiosk Launcher
+Documentation=https://github.com/your-repo/web-kiosk-launcher
+After=network.target graphical-session.target
+Wants=graphical-session.target
+
+# 确保在图形会话启动后运行
+Requires=graphical-session.target
+
+[Service]
+Type=simple
+# 用户和组（根据安装方式自动调整）
+User=%i
+Group=%i
+
+# 工作目录
+WorkingDirectory=/opt/web-kiosk-launcher
+
+# 环境变量
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/%i/.Xauthority
+Environment=PYTHONUNBUFFERED=1
+
+# 配置文件
+EnvironmentFile=/opt/web-kiosk-launcher/.env
+
+# 启动命令
+ExecStart=/usr/bin/python3 /opt/web-kiosk-launcher/server.py
+
+# 重启策略
+Restart=on-failure
+RestartSec=5
+
+# 进程管理
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/tmp /home/%i/.local/share/web-kiosk-launcher
+
+# 资源限制
+MemoryMax=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target
+
+# 用户级服务配置（如果以用户身份运行）
+# 将此文件复制到 ~/.config/systemd/user/web-kiosk.service
+# 并移除 User/Group 行，添加：
+# [Install]
+# WantedBy=default.target
