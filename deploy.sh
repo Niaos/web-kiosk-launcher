@@ -132,10 +132,32 @@ install_dependencies() {
             sudo apt update
             sudo apt install -y python3 python3-pip python3-venv curl wget
             
-            # 安装浏览器
-            if ! command -v chromium-browser &> /dev/null; then
-                log_info "安装 Chromium..."
-                sudo apt install -y chromium-browser
+            # 安装浏览器（尝试多种包名）
+            if ! command -v chromium-browser &> /dev/null && ! command -v chromium &> /dev/null; then
+                log_info "尝试安装 Chromium..."
+                if sudo apt install -y chromium-browser 2>/dev/null; then
+                    log_success "成功安装 chromium-browser"
+                elif sudo apt install -y chromium 2>/dev/null; then
+                    log_success "成功安装 chromium"
+                elif sudo apt install -y google-chrome-stable 2>/dev/null; then
+                    log_success "成功安装 google-chrome-stable"
+                else
+                    log_warning "无法安装 Chromium，尝试安装 Firefox..."
+                    if sudo apt install -y firefox-esr 2>/dev/null; then
+                        log_success "成功安装 firefox-esr"
+                    elif sudo apt install -y firefox 2>/dev/null; then
+                        log_success "成功安装 firefox"
+                    else
+                        log_error "无法安装任何支持的浏览器"
+                        log_info "请手动安装以下浏览器之一："
+                        echo "  sudo apt install chromium"
+                        echo "  sudo apt install firefox-esr"
+                        echo "  sudo apt install google-chrome-stable"
+                        exit 1
+                    fi
+                fi
+            else
+                log_info "浏览器已安装"
             fi
             
             # 安装图形工具
