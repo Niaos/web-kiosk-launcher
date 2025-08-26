@@ -62,7 +62,8 @@ check_dependencies() {
     
     if [ -z "$FOUND_BROWSER" ]; then
         log_warning "未找到支持的浏览器，请安装 Chromium 或 Firefox"
-        log_info "Ubuntu/Debian: sudo apt install chromium-browser"
+        log_info "Debian/Ubuntu: sudo apt install chromium"
+        log_info "Debian/Ubuntu: sudo apt install firefox-esr"
         log_info "CentOS/RHEL: sudo dnf install chromium"
         log_info "Arch: sudo pacman -S chromium"
     fi
