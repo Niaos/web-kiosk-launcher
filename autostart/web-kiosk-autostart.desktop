@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=Application
+Name=Web Kiosk Launcher
+Comment=Auto-start web kiosk launcher with default URL
+Exec=curl -X POST http://127.0.0.1:8787/open -d "url=https://example.org"
+Terminal=false
+X-GNOME-Autostart-enabled=true
+Hidden=false
+NoDisplay=false
+
+# 延迟启动，确保服务已就绪
+X-GNOME-Autostart-Delay=10
+
+# 仅在图形会话中启动
+OnlyShowIn=GNOME;KDE;XFCE;LXDE;MATE;
+
+# 注释：请根据需要修改以下内容：
+# 1. 修改 Exec 行中的 URL 为您想要的默认网址
+# 2. 如果需要等待服务启动，可以增加延迟时间
+# 3. 如果使用不同的桌面环境，请调整 OnlyShowIn 行
